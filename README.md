@@ -29,3 +29,5 @@ Update the backend and orchestrate migrating the 2 apps and script to kubernetes
 
 Good Luck!
 # Solution_of_technical_test
+
+  - please read the Solution.md file 
