@@ -1,0 +1,53 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-backend-ingress
+  labels:
+    app: {{ .Release.Name }}-backend-api
+  annotations:
+    {{- range $key, $value := .Values.backend_api.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range .Values.backend_api.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ $.Release.Name }}-backend-api
+                port:
+                  number: {{ $.Values.backend_api.service.port }}
+          {{- end }}
+    {{- end }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}-data-ingress
+  labels:
+    app: {{ .Release.Name }}-data-api
+  annotations:
+    {{- range $key, $value := .Values.data_api.ingress.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    {{- range .Values.data_api.ingress.hosts }}
+    - host: {{ .host }}
+      http:
+        paths:
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
+            backend:
+              service:
+                name: {{ $.Release.Name }}-data-api
+                port:
+                  number: {{ $.Values.data_api.service.port }}
+          {{- end }}
+    {{- end }}

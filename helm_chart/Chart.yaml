@@ -1,0 +1,4 @@
+apiVersion: v2
+name: technical_test
+description: A Helm chart for Kubernetes deployment 
+version: 0.1.0

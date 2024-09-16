@@ -1,0 +1,39 @@
+backend_api:
+  replicaCount: 2
+  image:
+    repository: elsayed2020/backendapi
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    hosts:
+      - host: backend.local
+        paths:
+          - path: /
+            pathType: Prefix
+
+data_api:
+  replicaCount: 2
+  image:
+    repository: elsayed2020/dataapi
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    hosts:
+      - host: data.local
+        paths:
+          - path: /
+            pathType: Prefix

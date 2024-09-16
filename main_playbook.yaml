@@ -1,0 +1,10 @@
+- name: Deploy technical_test to Kubernetes
+  hosts: localhost
+  tasks:
+    - name: Deploy using Helm
+      community.kubernetes.helm:
+        name: technical-test
+        chart_ref: ./helm_chart
+        release_namespace: re-tech-test
+        values_files:
+          - ./helm_chart/values.yaml

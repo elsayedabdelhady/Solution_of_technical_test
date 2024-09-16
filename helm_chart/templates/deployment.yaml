@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-api
+spec:
+  replicas: {{ .Values.backend_api.replicaCount }}
+  selector:
+    matchLabels:
+      app: backend-api
+  template:
+    metadata:
+      labels:
+        app: backend-api
+        k8s_app: kube-Devops
+    spec:
+      containers:
+        - name: backend-api
+          image: "{{ .Values.backend_api.image.repository }}:{{ .Values.backend_api.image.tag }}"
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PRODUCTION_EXTERNAL_INTEGRATION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: external-integration-keys
+                  key: production
+            - name: DEVELOPMENT_EXTERNAL_INTEGRATION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: external-integration-keys
+                  key: development
+            - name: ACCEPTANCE_EXTERNAL_INTEGRATION_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: external-integration-keys
+                  key: acceptance
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-api
+spec:
+  replicas: {{ .Values.data_api.replicaCount }}
+  selector:
+    matchLabels:
+      app: data-api
+  template:
+    metadata:
+      labels:
+        app: data-api
+        k8s_app: kube-Devops
+    spec:
+      containers:
+        - name: data-api
+          image: "{{ .Values.data_api.image.repository }}:{{ .Values.data_api.image.tag }}"
+          ports:
+            - containerPort: 5000
